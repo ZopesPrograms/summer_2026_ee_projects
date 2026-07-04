@@ -1,15 +1,16 @@
 #include <stdint.h>
 #include "gpio.h"
 
-#define ILI9486
+// SPI1 pins
 #define CS_PIN GPIO_PD10
 #define CLK_PIN GPIO_PD11
 #define MOSI_PIN GPIO_PD12
 #define MISO_PIN GPIO_PD13
+
+// LCD-specific pins
 #define F_CS_PIN GPIO_PE16
 #define RS_PIN GPIO_PE17
-
-#ifdef ILI9486
+#define RST_PIN GPIO_PD14
 
 #define LCD_RESET_SOFT   0x01
 #define LCD_DISPLAY_OFF  0x28
@@ -25,14 +26,6 @@
 #define INTF_PIX_FORM    0x3A // controls the LCD interface pixel format (how many bits/pixel, 8bit, 16bit, etc!)
 #define LCD_SLEEP_OUT    0x11
 #define LCD_DISPLAY_ON   0x29
-
-#define COL_ADDR_SET     0x2A // Sets column (x) address for pixel to be written or read
-#define PAGE_ADDR_SET    0x2B // Sets page (y) address for pixel to be written or read
-
-#define RAM_WR           0x2C // RAM WRITE to LCD display memory
-#define RAM_RD           0x2E // RAM READ from LCD display memory
-
-#endif
 
 void lcd_init(int16_t width, int16_t height);
 void lcd_writecommand(uint8_t c);
