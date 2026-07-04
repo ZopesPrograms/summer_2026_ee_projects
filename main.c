@@ -1,8 +1,12 @@
 #include "spi.h"
 #include "lcd.h"
 #include "gpio.h"
+#include "uart.h"
+#include "timer.h"
 
 int main() {
+    timer_init();
+    uart_init();
     spi_init();
     lcd_init(480, 320);
 
@@ -17,6 +21,7 @@ int main() {
     lcd_drawpixel(99, 101, 0xAC4F);
     lcd_drawpixel(100, 101, 0xAC4F);
     lcd_drawpixel(101, 101, 0xAC4F);
+
     while(1) { /* SPIN!!! */ }
     return 0;
 }

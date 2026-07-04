@@ -11,10 +11,9 @@ static const uint8_t COL_ADDR_SET  = 0x2A; // Sets column (x) address for pixel 
 static const uint8_t PAGE_ADDR_SET = 0x2B; // Sets page (y) address for pixel to be written or read
 
 static const uint8_t RAM_WR = 0x2C; // RAM WRITE to LCD display memory
-static const uint8_t RAM_RD = 0x2E; // RAM READ from LCD display memory
+/* static const uint8_t RAM_RD = 0x2E; // RAM READ from LCD display memory */
 
 void lcd_init(int16_t width, int16_t height) {
-    if(RAM_RD == RAM_RD) { /* SPIN! */ } // To remove compiler warning
     // Initializes LCD screen as SPI device
     lcd = spi_new(CS_PIN, SPI_MODE_0, 1000000);
 
@@ -23,8 +22,9 @@ void lcd_init(int16_t width, int16_t height) {
     _height = height;
 
     // Configures pins we are using (and one we are not, the flash chip select pin) to direct LED to be in output mode!
-    gpio_set_output(RS_PIN);
     gpio_set_output(F_CS_PIN);
+    gpio_set_output(RS_PIN);
+    gpio_set_output(RST_PIN);
 
     // Toggle RST high then low to reset
     gpio_write(RST_PIN, 1);
