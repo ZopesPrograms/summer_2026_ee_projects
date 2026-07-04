@@ -2,13 +2,12 @@
 #include "gpio.h"
 
 #define ILI9486
-#define RST_PIN GPIO_PD10
-#define CS_PIN GPIO_PD11
-#define F_CS_PIN GPIO_PC1
+#define CS_PIN GPIO_PD10
+#define CLK_PIN GPIO_PD11
+#define MOSI_PIN GPIO_PD12
+#define MISO_PIN GPIO_PD13
+#define F_CS_PIN GPIO_PE16
 #define RS_PIN GPIO_PE17
-#define WR_PIN GPIO_PE16
-#define DB0_PIN GPIO_PB0
-#define DB13_PIN GPIO_PD13
 
 #ifdef ILI9486
 

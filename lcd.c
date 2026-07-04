@@ -1,9 +1,11 @@
 #include "lcd.h"
 #include "gpio.h"
+#include "spi.h"
 #include "timer.h"
 
 static int _width;
 static int _height;
+static spi_device_t *lcd;
 
 #define WR_STB gpio_write(WR_PIN, 0); timer_delay_ms(5); gpio_write(WR_PIN, 1)
 #define WR_H   gpio_write(WR_PIN, 1)
@@ -52,19 +54,16 @@ static void write_upper8(uint8_t dat) {
 }
 
 void lcd_init(int16_t width, int16_t height) {
+    // Initializes LCD screen as SPI device
+    lcd = spi_new(CS_PIN, SPI_MODE_0, 1000000);
+
     // Assigns static width and height of LCD pixel-map/output to requested values:
     _width = width;
     _height = height;
 
     // Configures pins we are using (and one we are not, the flash chip select pin) to direct LED to be in output mode!
-    gpio_set_output(RST_PIN);
-    gpio_set_output(CS_PIN);
     gpio_set_output(RS_PIN);
-    gpio_set_output(WR_PIN);
     gpio_set_output(F_CS_PIN);
-    for(int i = 0; i < 8; i++) {
-        gpio_set_output(DB0_PIN+i);
-    }
 
     // Toggle RST low to reset
     gpio_write(RST_PIN, 1);
@@ -79,7 +78,7 @@ void lcd_init(int16_t width, int16_t height) {
 
     gpio_write(RST_PIN, 0);
     timer_delay_ms(10);
-    `
+    
     gpio_write(RST_PIN, 1);
     timer_delay_ms(10);
 
