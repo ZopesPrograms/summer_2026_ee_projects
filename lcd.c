@@ -11,26 +11,21 @@ static const uint8_t COL_ADDR_SET  = 0x2A; // Sets column (x) address for pixel 
 static const uint8_t PAGE_ADDR_SET = 0x2B; // Sets page (y) address for pixel to be written or read
 static const uint8_t RAM_WR = 0x2C; // RAM WRITE to LCD display memory
 
-// Small delay to ensure CS timing is met
-static void cs_delay(void) {
-    timer_delay_us(1);  // 1 microsecond delay
-}
-
 void lcd_init(int16_t width, int16_t height) {
     // Initializes LCD screen as SPI device
-    lcd = spi_new(CS_PIN, SPI_MODE_0, 4000000);  // 4 MHz - conservative speed
+    lcd = spi_new(CS_PIN, SPI_MODE_0, 10000000);  // Try 10 MHz (faster than 1 MHz)
 
     // Assigns static width and height of LCD pixel-map/output to requested values:
     _width = width;
     _height = height;
 
     // Configures pins we are using
-    gpio_set_output(F_CS_PIN);
+    //gpio_set_output(F_CS_PIN);
     gpio_set_output(RS_PIN);
     gpio_set_output(RST_PIN);
 
     // Initial pin states - deselect flash chip
-    gpio_write(F_CS_PIN, 1);
+    //gpio_write(F_CS_PIN, 1);
     gpio_write(RS_PIN, 1);
     gpio_write(CS_PIN, 1);
 
@@ -75,12 +70,12 @@ void lcd_init(int16_t width, int16_t height) {
 
     // Memory Access Control
     lcd_writecommand(MEM_ACC_CTRL);
-    lcd_writedata(0x48);  // Sets rotation and BGR order
+    lcd_writedata(0x48);  // Changed from 0x0a - sets rotation and BGR order
 
     // Display Function Control
     lcd_writecommand(DISP_FUNC_CTRL);
     lcd_writedata(0x00);
-    lcd_writedata(0x22);
+    lcd_writedata(0x22);  // Changed from 0x22
     lcd_writedata(0x3B);  // 480 lines
 
     // Positive Gamma Control
@@ -129,22 +124,16 @@ void lcd_init(int16_t width, int16_t height) {
 
 void lcd_writecommand(uint8_t c) {
     gpio_write(CS_PIN, 0);
-    cs_delay();
     gpio_write(RS_PIN, 0);  // Command mode
     spi_write(lcd, &c, 1);
-    cs_delay();
     gpio_write(CS_PIN, 1);  // Raise CS after command
-    cs_delay();
 }
 
 void lcd_writedata(uint8_t c) {
     gpio_write(CS_PIN, 0);
-    cs_delay();
     gpio_write(RS_PIN, 1);  // Data mode
     spi_write(lcd, &c, 1);
-    cs_delay();
     gpio_write(CS_PIN, 1);  // Raise CS after data
-    cs_delay();
 }
 
 void lcd_drawpixel(uint16_t x, uint16_t y, uint16_t color) {
@@ -153,12 +142,9 @@ void lcd_drawpixel(uint16_t x, uint16_t y, uint16_t color) {
 
     // Set column address (x)
     gpio_write(CS_PIN, 0);
-    cs_delay();
     gpio_write(RS_PIN, 0);
     spi_write(lcd, &COL_ADDR_SET, 1);
-    cs_delay();
     gpio_write(CS_PIN, 1);
-    cs_delay();
 
     // Send column start and end (big-endian)
     uint8_t x_data[4];
@@ -168,21 +154,15 @@ void lcd_drawpixel(uint16_t x, uint16_t y, uint16_t color) {
     x_data[3] = x & 0xFF;          // End column LSB
 
     gpio_write(CS_PIN, 0);
-    cs_delay();
     gpio_write(RS_PIN, 1);
     spi_write(lcd, x_data, 4);
-    cs_delay();
     gpio_write(CS_PIN, 1);
-    cs_delay();
 
     // Set page address (y)
     gpio_write(CS_PIN, 0);
-    cs_delay();
     gpio_write(RS_PIN, 0);
     spi_write(lcd, &PAGE_ADDR_SET, 1);
-    cs_delay();
     gpio_write(CS_PIN, 1);
-    cs_delay();
 
     // Send page start and end (big-endian)
     uint8_t y_data[4];
@@ -192,32 +172,27 @@ void lcd_drawpixel(uint16_t x, uint16_t y, uint16_t color) {
     y_data[3] = y & 0xFF;          // End page LSB
 
     gpio_write(CS_PIN, 0);
-    cs_delay();
     gpio_write(RS_PIN, 1);
     spi_write(lcd, y_data, 4);
-    cs_delay();
     gpio_write(CS_PIN, 1);
-    cs_delay();
 
     // Write pixel color to RAM
     gpio_write(CS_PIN, 0);
-    cs_delay();
     gpio_write(RS_PIN, 0);
     spi_write(lcd, &RAM_WR, 1);
-    cs_delay();
     gpio_write(CS_PIN, 1);
-    cs_delay();
 
     // Send color data (big-endian RGB565)
     uint8_t color_data[2];
     color_data[0] = (color >> 8) & 0xFF;  // Color MSB
-    color_data[1] = color & 0xFF;          // Color LSB
+    color_data[1] = color & 0xFF;         // Color LSB
 
     gpio_write(CS_PIN, 0);
-    cs_delay();
     gpio_write(RS_PIN, 1);
     spi_write(lcd, color_data, 2);
-    cs_delay();
     gpio_write(CS_PIN, 1);
-    cs_delay();
+}
+
+void lcd_fillscreen(uint16_t color) {
+    // TODO!
 }

@@ -31,3 +31,4 @@ void lcd_init(int16_t width, int16_t height);
 void lcd_writecommand(uint8_t c);
 void lcd_writedata(uint8_t c);
 void lcd_drawpixel(uint16_t x, uint16_t y, uint16_t color);
+void lcd_fillscreen(uint16_t color);

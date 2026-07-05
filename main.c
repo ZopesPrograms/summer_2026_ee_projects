@@ -22,6 +22,8 @@ int main() {
     lcd_drawpixel(100, 101, 0x07E0);
     lcd_drawpixel(101, 101, 0x07E0);
 
+    //lcd_fillscreen(0xF800);
+
     while(1) { /*uart_putchar('a');*/ }
     return 0;
 }
