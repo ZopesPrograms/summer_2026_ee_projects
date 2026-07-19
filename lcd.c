@@ -56,10 +56,20 @@ void lcd_init(int16_t width, int16_t height) {
     // Display Inversion Off
     lcd_writecommand(DISP_INV_OFF);
 
+/*
+ * TODO: TWEAK PARAMETERS OF THIS POWER CONTROL COMMAND TO SEE IF IT'S WHAT IS TURNING EVERY INPUTTED COLOR GREEN!!!!!!
+ *       -- IS EVERY COLOR BIT TOO HIGH OF AN INPUTTED VOLTAGE THAT IT BECOMES GREEN? IS THE ONBOARD STEPUP PRODUCING 5V EVERY TIME TO MAX COLOR OUT???
+*/
+
+
     // Power Control 1
     lcd_writecommand(LCD_POWER_CTRL_1);
     lcd_writedata(0x01); // +3.6250 V for positive gamma
     lcd_writedata(0x01); // -3.6250 V for negative gamma
+
+
+
+
 
     // VCOM Control
     lcd_writecommand(VCOM_CTRL);
@@ -71,6 +81,13 @@ void lcd_init(int16_t width, int16_t height) {
     lcd_writedata(0x00);
     lcd_writedata(0x22);  // Changed from 0x22
     lcd_writedata(0x3B);  // 480 lines
+
+    
+/*
+ * TODO: ADJUST GAMMA CONTROL TO MAKE EVERYTHING NOT ALWAYS GREEN!!!
+ *
+*/
+
 
     // Positive Gamma Control
     lcd_writecommand(POS_GAMMA_CTRL);
