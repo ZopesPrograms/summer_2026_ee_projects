@@ -13,7 +13,7 @@ static const uint8_t RAM_WR = 0x2C; // RAM WRITE to LCD display memory
 
 void lcd_init(int16_t width, int16_t height) {
     // Initializes LCD screen as SPI device
-    lcd = spi_new(CS_PIN, SPI_MODE_0, 1000000);  // Try 10 MHz (faster than 1 MHz)
+    lcd = spi_new(CS_PIN, SPI_MODE_0, 10000000);  // Try 10 MHz (faster than 1 MHz)
 
     // Assigns static width and height of LCD pixel-map/output to requested values:
     _width = width;
@@ -60,19 +60,6 @@ void lcd_init(int16_t width, int16_t height) {
     lcd_writecommand(LCD_POWER_CTRL_1);
     lcd_writedata(0x01); // +3.6250 V for positive gamma
     lcd_writedata(0x01); // -3.6250 V for negative gamma
-
-    /*
-
-    // Power Control 2
-    lcd_writecommand(LCD_POWER_CTRL_2);
-    lcd_writedata(0x43); // Step up by 5 from VCL1? Gamma bias control of 1.00X?
-    lcd_writedata(0x00); // External VCL for voltage regulator output voltage
-
-    // Power Control 3
-    lcd_writecommand(LCD_POWER_CTRL_3);
-    lcd_writedata(0x00); // Slow step-up-cycle (not stepping up here I guess).
-
-    */
 
     // VCOM Control
     lcd_writecommand(VCOM_CTRL);
@@ -202,5 +189,5 @@ spi_device_t *lcd_get_spi_dev() {
 }
 
 void lcd_fillscreen(uint16_t color) {
-    // TODO!
+    // TODO! DO THE EFFICIENT FILL SCREEN METHOD!!!
 }

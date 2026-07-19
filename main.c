@@ -11,18 +11,11 @@ int main() {
     spi_init();
     lcd_init(320, 480);
 
-    lcd_drawpixel(99, 99, 0x07E0);
-    lcd_drawpixel(100, 99, 0x07E0);
-    lcd_drawpixel(101, 99, 0x07E0);
-
-    lcd_drawpixel(99, 100, 0x07E0);
-    lcd_drawpixel(100, 100, 0x07E0);
-    lcd_drawpixel(101, 100, 0x07E0);
-
-    lcd_drawpixel(99, 101, 0x07E0);
-    lcd_drawpixel(100, 101, 0x07E0);
-    lcd_drawpixel(101, 101, 0x07E0);
-
-    while(1) { /* SPIN! */ }
+    for(int i = 100; i < 300; i++) {
+        for(int j = 100; j < 300; j++) {
+            lcd_drawpixel(i, j, 0x0FE0);
+        }
+    }
+    while(1) { lcd_flicker_test(); }
     return 0;
 }
