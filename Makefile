@@ -11,7 +11,7 @@ RUN_PROGRAM = main.bin
 LIBMANGO_SOURCES = libmymango/malloc.o
 GRAPHICS_SOURCES = graphics/draw_line.o graphics/draw_points.o graphics/geometry.o graphics/rotate_points.o graphics/rotate_vector.o
 
-OTHER_SOURCES = lcd.o maths.o mechanics.o
+OTHER_SOURCES = lcd_tests.o lcd.o maths.o mechanics.o
 
 run: $(RUN_PROGRAM)
 	mango-run $<

@@ -3,6 +3,7 @@
 #include "gpio.h"
 #include "uart.h"
 #include "timer.h"
+#include "lcd_tests.h"
 
 int main() {
     timer_init();
@@ -22,8 +23,6 @@ int main() {
     lcd_drawpixel(100, 101, 0x07E0);
     lcd_drawpixel(101, 101, 0x07E0);
 
-    //lcd_fillscreen(0xF800);
-
-    while(1) { /*uart_putchar('a');*/ }
+    while(1) { /* SPIN! */ }
     return 0;
 }
